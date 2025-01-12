@@ -100,6 +100,10 @@ impl ArenaString {
         self.inner.is_empty()
     }
 
+    pub fn generation(&self) -> usize {
+        self.inner.generation()
+    }
+
     pub fn clear(&mut self) {
         self.inner.clear();
     }

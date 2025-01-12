@@ -5,11 +5,11 @@ use super::{ArenaBox, ArenaArray, ArenaString, ArenaTable, ArenaList};
 
 /// An arena is a fixed size memory buffer that can be used to allocate
 /// memory for objects that have a lifetime that is bound to the arena.
-
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Arena {
     data: Box<[u8]>,
     offset: Cell<usize>,
+    generation: Cell<usize>,
 }
 
 impl Arena {
@@ -17,6 +17,7 @@ impl Arena {
         Arena {
             data: vec![0; size].into_boxed_slice(),
             offset: Cell::new(0),
+            generation: Cell::new(0),
         }
     }
 
@@ -34,6 +35,10 @@ impl Arena {
         } else {
             None
         }
+    }
+
+    pub fn generation(&self) -> usize {
+        self.generation.get()
     }
 
     pub fn make_box<T>(&self) -> Option<ArenaBox<T>> {
@@ -68,7 +73,14 @@ impl Arena {
         ArenaString::from_str(self, str.as_ref())
     }
 
-    pub fn clear(&self) {
+    pub fn reset(&self) {
+        let offset = self.offset.get();
+
+        // If we have allocated any memory, increment the generation
+        if offset > 0 {
+            self.generation.set(self.generation.get() + 1);
+        }
+
         self.offset.set(0);
     }
 

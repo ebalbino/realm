@@ -117,7 +117,7 @@ mod tests {
 
         assert_eq!(arena.occupied(), core::mem::size_of::<i32>() * 2);
 
-        arena.clear();
+        arena.reset();
         assert_eq!(arena.occupied(), 0);
     }
 

@@ -8,11 +8,12 @@ use std::ops::{Deref, DerefMut};
 pub struct Box<T> {
     arena: *const Arena,
     ptr: *mut T,
+    generation: usize,
 }
 
 impl<T> Box<T> {
     pub fn new(arena: &Arena) -> Option<Self> {
-        arena.alloc::<T>(1).map(|ptr| Box { arena, ptr })
+        arena.alloc::<T>(1).map(|ptr| Box { arena, ptr, generation: arena.generation() })
     }
 
     pub fn from_value(arena: &Arena, value: T) -> Option<Self> {
@@ -27,6 +28,10 @@ impl<T> Box<T> {
 
     pub fn as_mut_ptr(&mut self) -> *mut T {
         self.ptr
+    }
+
+    pub fn generation(&self) -> usize {
+        self.generation
     }
 }
 

@@ -7,6 +7,7 @@ use super::Arena;
 pub struct List<T> {
     arena: *const Arena,
     count: usize,
+    generation: usize,
     head: Option<*mut Node<T>>,
     tail: Option<*mut Node<T>>,
 }
@@ -21,11 +22,14 @@ pub struct Node<T> {
 
 impl<T> List<T> {
     pub fn new(arena: &Arena) -> Self {
+        let generation = arena.generation();
+
         List {
             arena,
             count: 0,
             head: None,
             tail: None,
+            generation,
         }
     }
 

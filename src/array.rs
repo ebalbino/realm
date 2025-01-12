@@ -6,6 +6,7 @@ use std::ops::{Deref, DerefMut};
 pub struct Array<T> {
     arena: *const Arena,
     ptr: *mut T,
+    generation: usize,
     len: usize,
     capacity: usize,
 }
@@ -17,12 +18,14 @@ impl<T> Array<T> {
         }
 
         let ptr = arena.alloc::<T>(capacity)?;
+        let generation = arena.generation();
 
         Some(Array {
             arena,
             ptr,
             len,
             capacity,
+            generation,
         })
     }
 
@@ -97,6 +100,10 @@ impl<T> Array<T> {
     pub fn as_mut_ptr(&mut self) -> *mut T {
         self.ptr
     }
+
+    pub fn generation(&self) -> usize {
+        self.generation
+    }
 }
 
 impl<T> Deref for Array<T> {
@@ -127,13 +134,15 @@ impl<T> AsMut<[T]> for Array<T> {
 
 impl<T> Clone for Array<T> {
     fn clone(&self) -> Self {
-        let new_ptr = unsafe { (*self.arena).push_array(&self[..]).unwrap().as_ptr() as *mut T };
+        let arena = unsafe { &*self.arena };
+        let new_ptr = arena.push_array(&self[..]).unwrap().as_ptr() as *mut T;
 
         Array {
             arena: self.arena,
-            ptr: new_ptr,
             len: self.len,
             capacity: self.capacity,
+            generation: self.generation,
+            ptr: new_ptr,
         }
     }
 }

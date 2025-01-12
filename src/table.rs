@@ -42,6 +42,10 @@ impl<V> ArenaTable<V> {
         self.keys.is_empty()
     }
 
+    pub fn generation(&self) -> usize {
+        self.keys.generation()
+    }
+
     pub fn get_index(&self, key: &str) -> Option<usize> {
         let hash = hash(key);
 
