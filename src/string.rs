@@ -4,6 +4,9 @@ use std::cmp::Ordering;
 use std::fmt::Write;
 use std::ops::Deref;
 
+/// An arena backed string. This is a thin wrapper around an `ArenaArray<u8>`.
+/// This is a zero-copy string, and is not null-terminated.
+/// ArenaString derefs to a `str` and can be used in most places where a `str` is expected.
 #[derive(Clone, Eq)]
 pub struct ArenaString {
     inner: ArenaArray<u8>,

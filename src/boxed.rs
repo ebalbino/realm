@@ -1,6 +1,9 @@
 use super::Arena;
 use std::ops::{Deref, DerefMut};
 
+/// A `Box` is a pointer to a value that is allocated in an arena.
+/// Boxed values implement Deref and DerefMut to allow for dereferencing the
+/// pointer to access the value.
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Box<T> {
     arena: *const Arena,

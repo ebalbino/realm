@@ -1,6 +1,7 @@
 use super::Arena;
 use std::ops::{Deref, DerefMut};
 
+/// A fixed-size array that is allocated in an arena.
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Array<T> {
     arena: *const Arena,

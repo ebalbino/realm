@@ -3,7 +3,10 @@ use std::cell::Cell;
 
 use super::{ArenaBox, ArenaArray, ArenaString, ArenaTable, ArenaList};
 
+/// An arena is a fixed size memory buffer that can be used to allocate
+/// memory for objects that have a lifetime that is bound to the arena.
 
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Arena {
     data: Box<[u8]>,
     offset: Cell<usize>,

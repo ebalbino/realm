@@ -1,17 +1,21 @@
 use super::{Arena, ArenaArray, ArenaString};
 use fxhash::hash;
 
-#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
-pub struct Key {
-    key: ArenaString,
-    hash: usize,
-}
-
+/// An arena backed hash table that maps keys to values.
+/// The hash table is backed by two arrays, one for the keys
+/// and one for the values. The keys are stored as strings
+/// and the values can be any type.
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct ArenaTable<V> {
     arena: *const Arena,
     keys: ArenaArray<Key>,
     values: ArenaArray<V>,
+}
+
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
+pub struct Key {
+    key: ArenaString,
+    hash: usize,
 }
 
 impl<V> ArenaTable<V> {

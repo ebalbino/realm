@@ -1,11 +1,8 @@
 use super::Arena;
 
-#[derive(Debug, PartialEq)]
-pub struct Node<T> {
-    next: Option<*mut Node<T>>,
-    value: T,
-}
-
+/// A singly-linked list that is allocated in an arena. Each push operation
+/// appends a new element to the end of the list by allocating a new node in the
+/// arena.
 #[derive(Debug, PartialEq)]
 pub struct List<T> {
     arena: *const Arena,
@@ -13,6 +10,14 @@ pub struct List<T> {
     head: Option<*mut Node<T>>,
     tail: Option<*mut Node<T>>,
 }
+
+/// A node in a singly-linked list.
+#[derive(Debug, PartialEq)]
+pub struct Node<T> {
+    next: Option<*mut Node<T>>,
+    value: T,
+}
+
 
 impl<T> List<T> {
     pub fn new(arena: &Arena) -> Self {
