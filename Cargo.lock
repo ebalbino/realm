@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "realm"
+name = "realms"
 version = "0.1.0"
 dependencies = [
  "fxhash",
